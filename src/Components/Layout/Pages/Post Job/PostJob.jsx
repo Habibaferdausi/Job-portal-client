@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../../AuthProvider/AuthProvider";
 
 const PostJob = () => {
+  const { user } = useContext(AuthContext);
+
   const handlePostJobs = (event) => {
     event.preventDefault();
 
@@ -12,9 +16,9 @@ const PostJob = () => {
     const category = form.category.value;
     const statues = form.statues.value;
     const deadline = form.deadline.value;
-    const postedBy = from.postedBy.value;
+    const postedBy = form.postedBy.value;
     const description = form.description.value;
-    const options = from.options.value;
+    const options = form.options.value;
     const image = form.image.value;
 
     const posted = {
@@ -30,7 +34,17 @@ const PostJob = () => {
       image,
       options,
     };
-    console.log(newChocolate);
+    console.log(posted);
+    fetch("http://localhost:4000/postesdJobs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+      });
+    console.log(data);
   };
 
   return (
@@ -148,6 +162,7 @@ const PostJob = () => {
                 placeholder=" Enter your mail"
                 className="input input-bordered w-full"
                 value={user?.email}
+                defaultValue={user?.email}
               />
             </label>
           </div>
